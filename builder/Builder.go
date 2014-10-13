@@ -9,6 +9,7 @@ import (
 */
 
 type Builder interface {
+	BuildNewVacation()
 	BuildDay(date time.Time)
 	Days(days int8)
 	AddHotel(name string, date time.Time)
@@ -33,12 +34,16 @@ type Vacation struct {
 */
 
 type VacationBuilder struct {
-	Vacation Vacation
+	Vacation *Vacation
 }
 
 /*
  具体方法实现
 */
+
+func (V *VacationBuilder) BuildNewVacation() {
+	V.Vacation = &Vacation{}
+}
 
 func (V *VacationBuilder) BuildDay(date time.Time) {
 	V.Vacation.BuildDay = date
@@ -61,7 +66,7 @@ func (V *VacationBuilder) AddReservation(reserved bool) {
 */
 
 func (V *VacationBuilder) GetVacation() *Vacation {
-	return &V.Vacation
+	return V.Vacation
 }
 
 /*
@@ -77,6 +82,7 @@ type Director struct {
 */
 
 func (self *Director) Construct() *Vacation {
+	self.Builder.BuildNewVacation()
 	self.Builder.AddHotel("香格里拉酒店", time.Date(2014, 10, 1, 18, 0, 0, 0, time.UTC))
 	self.Builder.AddReservation(true)
 	self.Builder.BuildDay(time.Date(2014, 9, 15, 12, 0, 0, 0, time.UTC))
