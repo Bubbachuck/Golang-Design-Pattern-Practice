@@ -5,80 +5,148 @@ import (
 )
 
 /*
- Abstract Factory 抽象工厂 (一个 Interface)
+ 定义第一类抽象产品接口
 */
 
-type GUIFactory interface {
-	CreateButton() Button
+type IBusinessCar interface {
+	Run()
 }
 
 /*
- Concrete Factory 具体工厂 (WinFactory,要实现 Interface 中的函数)
+ 定义第二类抽象产品接口
 */
 
-type WinFactory struct {
-	Os string
+type ISportCar interface {
+	Run()
 }
 
 /*
- Concrete Factory 具体工厂 (OSXFactory,要实现 Interface 中的函数)
+ 定义第一家工厂BMW的第一类产品BMWBusinessCar
 */
 
-type OSXFactory struct {
-	Os string
+type BMWBusinessCar struct {
+	Model string
 }
 
 /*
- Abstract Product 抽象产品 (一个 Interface)
+ 实现第一家工厂BMW的第一类产品BMWBusinessCar的属性方法
 */
 
-type Button interface {
-	Paint()
+func (self *BMWBusinessCar) Run() {
+	fmt.Println("BMWBusinessCar " + self.Model + " run!")
 }
 
 /*
- Concrete Product 具体产品 (WinButton,要实现 Interface 中的函数)
+ 定义第二家工厂Benz的第一类产品BenzBusinessCar
 */
 
-type WinButton struct {
+type BenzBusinessCar struct {
+	Model string
 }
 
 /*
- Concrete Product 具体产品 (OSXButton,要实现 Interface 中的函数)
+ 实现第二家工厂Benz的第一类产品BenzBusinessCar的属性方法
 */
 
-type OSXButton struct {
+func (self *BenzBusinessCar) Run() {
+	fmt.Println("BenzBusinessCar " + self.Model + " run!")
 }
 
 /*
- 具体函数实现
+ 定义第一家工厂BMW的第二类产品BMWSportCar
 */
 
-func (*WinFactory) CreateButton() Button {
-	return &WinButton{}
-}
-
-func (*OSXFactory) CreateButton() Button {
-	return &OSXButton{}
-}
-
-func (self *WinButton) Paint() {
-	fmt.Println("这是一个Windows按钮")
-}
-
-func (self *OSXButton) Paint() {
-	fmt.Println("这是一个OSX按钮")
+type BMWSportCar struct {
+	Model string
 }
 
 /*
- Client (一个应用)
+ 实现第一家工厂BMW的第二类产品BMWSportCar的属性方法
+*/
+
+func (self *BMWSportCar) Run() {
+	fmt.Println("BMWSportCar " + self.Model + " run!")
+}
+
+/*
+ 定义第二家工厂Benz的第二类产品BMWSportCar
+*/
+
+type BenzSportCar struct {
+	Model string
+}
+
+/*
+ 实现第二家工厂Benz的第二类产品BMWSportCar的属性方法
+*/
+
+func (self *BenzSportCar) Run() {
+	fmt.Println("BenzSportCar " + self.Model + " run!")
+}
+
+/*
+ 定义抽象工厂接口
+*/
+
+type IDriver interface {
+	BusinessCarDriver() IBusinessCar
+	SportCarDriver() ISportCar
+}
+
+/*
+ 具体工厂 —— 第一家工厂BMWCarDriver
+*/
+
+type BMWCarDriver struct {
+	Gender string
+}
+
+/*
+ 实现第一家工厂BMWCarDriver的方法
+*/
+
+func (self *BMWCarDriver) BusinessCarDriver(Model string) IBusinessCar {
+	return &BMWBusinessCar{Model: Model}
+}
+
+func (self *BMWCarDriver) SportCarDriver(Model string) ISportCar {
+	return &BMWSportCar{Model: Model}
+}
+
+/*
+ 具体工厂 —— 第二家工厂BenzCarDriver
+*/
+
+type BenzCarDriver struct {
+	Gender string
+}
+
+/*
+ 实现第二家工厂BenzCarDriver的方法
+*/
+
+func (self *BenzCarDriver) BusinessCarDriver(Model string) IBusinessCar {
+	return &BenzBusinessCar{Model: Model}
+}
+
+func (self *BenzCarDriver) SportCarDriver(Model string) ISportCar {
+	return &BenzSportCar{Model: Model}
+}
+
+/*
+ App (一个应用)
 */
 
 type App struct {
 }
 
 func (*App) Verify() {
-	f := OSXFactory{}
-	b := f.CreateButton()
-	b.Paint()
+	//创建一个具体工厂
+	MyDriver := BenzCarDriver{Gender: "male"}
+	//工厂生产一类产品
+	MyCar1 := MyDriver.SportCarDriver("SLR")
+	//产品验收
+	MyCar1.Run()
+	MyCar2 := MyDriver.BusinessCarDriver("350L")
+	MyCar2.Run()
 }
