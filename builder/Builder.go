@@ -41,32 +41,32 @@ type VacationBuilder struct {
  具体方法实现
 */
 
-func (V *VacationBuilder) BuildNewVacation() {
-	V.Vacation = &Vacation{}
+func (self *VacationBuilder) BuildNewVacation() {
+	self.Vacation = &Vacation{}
 }
 
-func (V *VacationBuilder) BuildDay(date time.Time) {
-	V.Vacation.BuildDay = date
+func (self *VacationBuilder) BuildDay(date time.Time) {
+	self.Vacation.BuildDay = date
 }
 
-func (V *VacationBuilder) Days(days int8) {
-	V.Vacation.Days = days
+func (self *VacationBuilder) Days(days int8) {
+	self.Vacation.Days = days
 }
 
-func (V *VacationBuilder) AddHotel(name string, date time.Time) {
-	V.Vacation.Hotel, V.Vacation.StartDate = name, date
+func (self *VacationBuilder) AddHotel(name string, date time.Time) {
+	self.Vacation.Hotel, self.Vacation.StartDate = name, date
 }
 
-func (V *VacationBuilder) AddReservation(reserved bool) {
-	V.Vacation.Reservation = reserved
+func (self *VacationBuilder) AddReservation(reserved bool) {
+	self.Vacation.Reservation = reserved
 }
 
 /*
  生成产品
 */
 
-func (V *VacationBuilder) GetVacation() *Vacation {
-	return V.Vacation
+func (self *VacationBuilder) GetVacation() *Vacation {
+	return self.Vacation
 }
 
 /*
